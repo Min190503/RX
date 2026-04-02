@@ -3,11 +3,11 @@
 #include "driver/gpio.h"
 
 #define UART_NUM         UART_NUM_1
-#define UART_TX_PIN      17  // Nối RX Mamba
-#define UART_RX_PIN      18  // Nối TX Mamba
+#define UART_TX_PIN      17  // Noi RX Mamba
+#define UART_RX_PIN      18  // Noi TX Mamba
 #define UART_BAUDRATE    115200
 
-// Struct đóng gói gửi Mamba
+// Struct Mamba
 typedef struct {
     uint8_t  header;
     uint16_t throttle;

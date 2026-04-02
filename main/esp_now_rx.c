@@ -7,14 +7,27 @@
 
 static drone_recv_cb_t user_callback = NULL;
 
+static uint32_t last_packet_tick =0;
+
 static void internal_recv_cb(const esp_now_recv_info_t *recv_info, const uint8_t *data, int len) {
 
     if (len == sizeof(RC_Data_t) && user_callback != NULL) {
+
+        last_packet_tick = xTaskGetTickCount();
 
         int rssi = recv_info->rx_ctrl->rssi;
 
         user_callback((RC_Data_t *)data, rssi);
     }
+}
+
+uint8_t esp_now_is_alive(void){
+    if ((xTaskGetTickCount() - last_packet_tick) > pdMS_TO_TICKS(200))
+    {
+        return false;
+    }
+    return true;
+    
 }
 
 void esp_now_rx_init(drone_recv_cb_t callback) {

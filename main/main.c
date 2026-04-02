@@ -19,7 +19,7 @@ typedef struct
 
 //mac tay cam 
 uint8_t transmitter_mac[] = {0x80, 0xB5, 0x4E, 0xC1, 0xDE, 0x88 };
-
+uint32_t last_rc_time = 0;
 
 RC_Data_t last_data = {0}; 
 volatile uint32_t packet_count = 0; 
@@ -46,9 +46,9 @@ void app_main(void) {
     printf("Drone da san sang! Cho ket noi tu tay cam...\n");
     
     while(1) {
-        uint32_t pps = packet_count; 
-        
-        packet_count = 0; 
+        uint32_t pps = __atomic_exchange_n(&packet_count, 0, __ATOMIC_RELAXED);
+
+        printf("Song(RSSI): %4d dBm | Toc do nhan: %3lu goi/giay\n", current_rssi, pps);
 
         Telemetry_Packet_t tele;
         tele.rssi = current_rssi;
